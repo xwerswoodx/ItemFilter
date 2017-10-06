@@ -1,0 +1,16 @@
+name: ItemFilter
+version: 0.1-B1
+author: xwerswoodx
+main: qlt.xwerswoodx.itemfilter.main
+commands:
+  ItemFilter:
+    description: Opens filter menu.
+    aliases: [if]
+  Shop:
+    description: Open Shop GUI.
+
+permissions:
+  ItemFilter.admin:
+    default: op
+  ItemFilter.use:
+    default: op
