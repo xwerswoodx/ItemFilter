@@ -1,10 +1,14 @@
 package qlt.xwerswoodx.itemfilter;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class EHandler implements Listener {
 	main plugin;
@@ -53,8 +57,14 @@ public class EHandler implements Listener {
 							else
 								plugin.getConfig().set("mode." + player.getUniqueId().toString(), 1);
 							plugin.saveConfig();
-							player.closeInventory();
-							plugin.openGUI(player);
+							ItemStack item = new ItemStack(Material.PAPER, 1);
+							ItemMeta meta = item.getItemMeta();
+							meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getMode(player)));
+							item.setItemMeta(meta);
+							plugin.setInfo(player, item);
+							player.getOpenInventory().setItem(53, item);
+//							player.closeInventory();
+//							plugin.openGUI(player);
 						} else {
 							plugin.delItem((Player) event.getWhoClicked(), event.getCurrentItem(), event.getSlot());
 						}

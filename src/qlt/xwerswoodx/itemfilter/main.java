@@ -52,30 +52,6 @@ public class main extends JavaPlugin {
 	public boolean checkItem(Player player, ItemStack item) {
 		if (!getConfig().contains(player.getUniqueId().toString()))
 			return false;
-		/*
-		 * Old System: Why did I check it with for condition? :))
-		 * Really don't need it, i just hold it maybe later I want to check something to remember.
-		 * Totally unused.
-		ConfigurationSection items = getConfig().getConfigurationSection(player.getUniqueId().toString());
-		Object[] obj = items.getKeys(false).toArray();
-		for (int i = 0; i < obj.length; i++) {
-			if (getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).split(":")[0].equals(item.getType().toString())) {
-				if (canDamage(item)) {
-					return true;
-				} else {
-					short data = Short.parseShort(getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).split(":")[1]);
-					if (item.getDurability() == data)
-						return true;
-				}
-			}
-		}
-		*/
-		
-		/* 
-		 * New System:
-		 *   It's slightly increase process time.
-		 *   Directly check path instead of checking all of them. 
-		 */
 		Short data = item.getDurability();
 		if (canDamage(item))
 			data = 0;
@@ -101,7 +77,9 @@ public class main extends JavaPlugin {
 			saveConfig();
 			ConfigurationSection items = getConfig().getConfigurationSection(player.getUniqueId().toString());
 			Object[] obj = items.getKeys(false).toArray();
-			player.getOpenInventory().setItem(obj.length - 1, item);
+			ItemStack newItem = item.clone();
+			newItem.setDurability(data);
+			player.getOpenInventory().setItem(obj.length - 1, newItem);
 			player.updateInventory();
 		}
 // Cancel to reopen inventory, because it sets mause cursor to middle.
