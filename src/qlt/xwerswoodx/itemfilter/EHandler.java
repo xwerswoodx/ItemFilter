@@ -20,14 +20,16 @@ public class EHandler implements Listener {
 	public void itemPickUp_Ground(EntityPickupItemEvent event) {
 		if (event.getEntity() instanceof Player) {
 			Player player = (Player) event.getEntity();
-			if (plugin.getConfig().contains(player.getUniqueId().toString())) {
-//				event.getItem();
-				if (plugin.checkItem(player, event.getItem().getItemStack())) {
-					if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 1)
-						event.setCancelled(true);
-				} else {
-					if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 2)
-						event.setCancelled(true);
+			if (player.hasPermission("ItemFilter.use")) {
+				if (plugin.getConfig().contains(player.getUniqueId().toString())) {
+//					event.getItem();
+					if (plugin.checkItem(player, event.getItem().getItemStack())) {
+						if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 1)
+							event.setCancelled(true);
+					} else {
+						if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 2)
+							event.setCancelled(true);
+					}
 				}
 			}
 		}
