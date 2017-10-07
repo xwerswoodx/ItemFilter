@@ -26,7 +26,7 @@ public class EHandler implements Listener {
 					if (plugin.checkItem(player, event.getItem().getItemStack())) {
 						if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 1)
 							event.setCancelled(true);
-					} else {
+					} else {						
 						if (plugin.getConfig().getInt("mode." + player.getUniqueId().toString()) == 2)
 							event.setCancelled(true);
 					}
