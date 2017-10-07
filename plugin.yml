@@ -6,8 +6,6 @@ commands:
   ItemFilter:
     description: Opens filter menu.
     aliases: [if]
-  Shop:
-    description: Open Shop GUI.
 
 permissions:
   ItemFilter.admin:
