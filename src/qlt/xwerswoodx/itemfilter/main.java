@@ -63,9 +63,10 @@ public class main extends JavaPlugin {
 	
 	public void setItem(Player player, ItemStack item) {
 		if (getConfig().contains(player.getUniqueId().toString())) {
+			int max = getSize(player) - 2;
 			ConfigurationSection items = getConfig().getConfigurationSection(player.getUniqueId().toString());
 			Object[] obj = items.getKeys(false).toArray();
-			if (obj.length > 52)
+			if (obj.length > max)
 				return;
 		}
 		
@@ -77,8 +78,10 @@ public class main extends JavaPlugin {
 			saveConfig();
 			ConfigurationSection items = getConfig().getConfigurationSection(player.getUniqueId().toString());
 			Object[] obj = items.getKeys(false).toArray();
-			ItemStack newItem = item.clone();
-			newItem.setDurability(data);
+			ItemStack newItem = new ItemStack(item.getType(), 1, data);
+//          Removed, because clone() copy enchants and lores too. It's just graphical issue.
+//          ItemStack newItem = item.clone()
+//			newItem.setDurability(data);
 			player.getOpenInventory().setItem(obj.length - 1, newItem);
 			player.updateInventory();
 		}
@@ -115,7 +118,8 @@ public class main extends JavaPlugin {
 			getConfig().set("mode." + player.getUniqueId().toString(), 1);
 		}
 		
-		int size = 54;
+		int size = getSize(player);
+		int max = size - 1;
 		Inventory gui = Bukkit.createInventory(null, size, "ItemFilter");
 		
 		if (getConfig().contains(player.getUniqueId().toString())) {
@@ -124,10 +128,16 @@ public class main extends JavaPlugin {
 			
 			if (obj.length > 0) {
 				for (int i = 0; i < obj.length; i++) {
-					Material material = Material.getMaterial(getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).toString().split(":")[0]);
-					short data = Short.parseShort(getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).split(":")[1]);
-					ItemStack item = new ItemStack(material, 1, data);
-					gui.setItem(i, item);
+					if (i <= max - 1) {
+						Material material = Material.getMaterial(getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).toString().split(":")[0]);
+						short data = Short.parseShort(getConfig().getString(player.getUniqueId().toString() + "." + obj[i]).split(":")[1]);
+						ItemStack item = new ItemStack(material, 1, data);
+						gui.setItem(i, item);
+					} else {
+						// If you use this plugin first, you don't need that, but, it's just fix max item amount.
+						getConfig().set(player.getUniqueId().toString() + "." + obj[i], null);
+						saveConfig();
+					}
 				}
 			}
 		}
@@ -137,7 +147,7 @@ public class main extends JavaPlugin {
 		mode.setItemMeta(meta);
 //		addLore(mode, ChatColor.translateAlternateColorCodes('&', getInfo(player)));
 		setInfo(player, mode);
-		gui.setItem(53, mode);
+		gui.setItem(max, mode);
 		player.openInventory(gui);
 	}
 	
@@ -209,5 +219,20 @@ public class main extends JavaPlugin {
 		loreList.add(lore);
 		meta.setLore(loreList);
 		item.setItemMeta(meta);
+	}
+	
+	public int getSize(Player player) {
+		int size = 1;
+		if (player.hasPermission("ItemFilter.size6"))
+			size = 6;
+		else if (player.hasPermission("ItemFilter.size5"))
+			size = 5;
+		else if (player.hasPermission("ItemFilter.size4"))
+			size = 4;
+		else if (player.hasPermission("ItemFilter.size3"))
+			size = 3;
+		else if (player.hasPermission("ItemFilter.size2"))
+			size = 2;
+		return size * 9;
 	}
 }
