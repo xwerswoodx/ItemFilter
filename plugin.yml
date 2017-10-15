@@ -1,5 +1,5 @@
 name: ItemFilter
-version: 0.1-B1
+version: 0.1-B2
 author: xwerswoodx
 main: qlt.xwerswoodx.itemfilter.main
 commands:
@@ -11,4 +11,14 @@ permissions:
   ItemFilter.admin:
     default: op
   ItemFilter.use:
+    default: op
+  ItemFilter.size2:
+    default: op
+  ItemFilter.size3:
+    default: op
+  ItemFilter.size4:
+    default: op
+  ItemFilter.size5:
+    default: op
+  ItemFilter.size6:
     default: op
