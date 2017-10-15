@@ -14,11 +14,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class main extends JavaPlugin {
-	EHandler handler = new EHandler(this);
-	
+public class main extends JavaPlugin {	
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(handler, this);
+		String version = getVersion();
+//		getServer().getLogger().info(version);
+		if (version.startsWith("v1_8_R")) {
+			getServer().getPluginManager().registerEvents(new EHandler_1_8_R1(this), this);
+		} else if (version.startsWith("v1_9_R")) {
+			getServer().getPluginManager().registerEvents(new EHandler_1_8_R1(this), this);
+		} else if (version.startsWith("v1_10_R")) {
+			getServer().getPluginManager().registerEvents(new EHandler_1_8_R1(this), this);
+		} else if (version.startsWith("v1_11_R")) {
+			getServer().getPluginManager().registerEvents(new EHandler_1_8_R1(this), this);
+		} else if (version.startsWith("v1_12_R")) {
+			getServer().getPluginManager().registerEvents(new EHandler_1_12_R1(this), this);
+		} else {
+			getServer().getLogger().info("Your version " + version + " is not supported yet.");
+			getServer().getPluginManager().disablePlugin(this);
+		}
+		getServer().getLogger().info("ItemFilter running on " + version + " successfully.");
 		getConfig().options().copyDefaults(true);
 		saveDefaultConfig();
 	}
@@ -234,5 +248,9 @@ public class main extends JavaPlugin {
 		else if (player.hasPermission("ItemFilter.size2"))
 			size = 2;
 		return size * 9;
+	}
+	
+	public String getVersion() {
+		return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 	}
 }
